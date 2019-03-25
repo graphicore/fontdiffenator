@@ -24,6 +24,8 @@ def render_string(font, string, features=None, pt_size=128):
         cmd += ['--features=%s' % ','.join(features).replace("aalt,", "")]
     cmd += [font.path, u'--text={}'.format(string)]
     try:
+        from remote_pdb import RemotePdb
+        pdb = RemotePdb('0.0.0.0', 4444).set_trace()
         img = StringIO(subprocess.check_output(cmd))
         return Image.open(img)
     except FileNotFoundError:
