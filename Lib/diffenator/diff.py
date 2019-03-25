@@ -53,7 +53,7 @@ class DiffFonts:
     font_after: DFont
     settings: dict
     """
-    
+
     SETTINGS = dict(
         glyphs_thresh=0,
         marks_thresh=0,
@@ -315,7 +315,7 @@ def diff_glyphs(font_before, font_after,
     new = _subtract_items(glyphs_after_h, glyphs_before_h)
     modified = _modified_glyphs(glyphs_before_h, glyphs_after_h, thresh,
                                 scale_upms=scale_upms, render_diffs=render_diffs)
-    
+
     new = DiffTable("glyphs new", font_before, font_after, data=new, renderable=True)
     new.report_columns(["glyph", "area", "string"])
     new.sort(key=lambda k: k["glyph"].name)
@@ -352,7 +352,7 @@ def _modified_glyphs(glyphs_before, glyphs_after, thresh=0.00,
             font_after = glyphs_after[k]['glyph'].font
             glyph = glyphs_before[k]
             logger.debug('Rendering {} {}'.format(glyph['glyph'].name, glyph['string']))
-            diff = diff_rendering(font_before, font_after, glyph['string'], glyph['features'])
+            diff = diff_rendering(font_before, font_after, glyph['string'].encode('utf-8'), glyph['features'])
         else:
             # using abs does not take into consideration if a curve is reversed
             area_before = abs(glyphs_before[k]['area'])
@@ -471,14 +471,14 @@ def diff_kerning(font_before, font_after, thresh=2, scale_upms=True):
     new = DiffTable("kerns new", font_before, font_after, data=new, renderable=True)
     new.report_columns(["left", "right", "value", "string"])
     new.sort(key=lambda k: abs(k["value"]), reverse=True)
-    
+
     modified = DiffTable("kerns modified", font_before, font_after, data=modified, renderable=True)
     modified.report_columns(["left", "right", "diff", "string"])
     modified.sort(key=lambda k: abs(k["diff"]), reverse=True)
     return {
         'new': new,
         'missing': missing,
-        'modified': modified, 
+        'modified': modified,
     }
 
 
@@ -542,7 +542,7 @@ def diff_metrics(font_before, font_after, thresh=1, scale_upms=True):
     modified.report_columns(["glyph", "diff_adv"])
     modified.sort(key=lambda k: k["diff_adv"], reverse=True)
     return {
-            'modified': modified 
+            'modified': modified
             }
 
 
