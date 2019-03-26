@@ -352,7 +352,7 @@ def _modified_glyphs(glyphs_before, glyphs_after, thresh=0.00,
             font_after = glyphs_after[k]['glyph'].font
             glyph = glyphs_before[k]
             logger.debug('Rendering {} {}'.format(glyph['glyph'].name, glyph['string']))
-            diff = diff_rendering(font_before, font_after, glyph['string'].encode('utf-8'), glyph['features'])
+            diff = diff_rendering(font_before, font_after, glyph['string'], glyph['features'])
         else:
             # using abs does not take into consideration if a curve is reversed
             area_before = abs(glyphs_before[k]['area'])
