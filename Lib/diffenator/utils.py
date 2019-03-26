@@ -23,9 +23,9 @@ def render_string(font, string, features=None, pt_size=128):
         # glyphsapp will autogen this feature
         cmd += ['--features=%s' % ','.join(features).replace("aalt,", "")]
     cmd += [font.path, u'--text={}'.format(string)]
-    # from remote_pdb import RemotePdb
-    # pdb = RemotePdb('0.0.0.0', 4444).set_trace()
-    print('cmd>>>', cmd)
+    from remote_pdb import RemotePdb
+    pdb = RemotePdb('0.0.0.0', 4444).set_trace()
+
     try:
         img = StringIO(subprocess.check_output(cmd))
         return Image.open(img)
