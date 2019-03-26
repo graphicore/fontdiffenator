@@ -6,6 +6,8 @@ try:
 except ImportError:  # py3 workaround
     from io import BytesIO as StringIO
 
+from remote_pdb import RemotePdb
+pdb = RemotePdb('0.0.0.0', 4444)
 
 def render_string(font, string, features=None, pt_size=128):
     """Use Harfbuzz to render a string"""
@@ -23,8 +25,6 @@ def render_string(font, string, features=None, pt_size=128):
         # glyphsapp will autogen this feature
         cmd += ['--features=%s' % ','.join(features).replace("aalt,", "")]
     cmd += [font.path, u'--text={}'.format(string)]
-    from remote_pdb import RemotePdb
-    pdb = RemotePdb('0.0.0.0', 4444).set_trace()
 
     try:
         img = StringIO(subprocess.check_output(cmd))
@@ -33,4 +33,9 @@ def render_string(font, string, features=None, pt_size=128):
         raise OSError(
             "hb-view was not found. Check if Harbuzz is installed."
         )
+    except Exception as e:
+        print(e)
+        pdb.set_trace()
+        raise
+
 
