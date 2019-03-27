@@ -18,20 +18,30 @@ from __future__ import print_function
 import collections
 from diffenator.utils import render_string
 from diffenator import DiffTable, TXTFormatter, MDFormatter, HTMLFormatter
-import functools
 import os
 import time
 import logging
 
 __all__ = ['DiffFonts', 'diff_metrics', 'diff_kerning',
-            'diff_marks', 'diff_mkmks', 'diff_attribs', 'diff_glyphs']
+            'diff_marks', 'diff_attribs', 'diff_glyphs']
 
 logger = logging.getLogger('fontdiffenator')
+
+# create formatter
+formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
+                              "%Y-%m-%d %H:%M:%S")
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+# add formatter to ch
+ch.setFormatter(formatter)
+# add ch to logger
+logger.addHandler(ch)
 
 
 def timer(method):
     def timed(*args, **kw):
         ts = time.time()
+        logger.info('timer enter: {}'.format(method.__name__))
         result = method(*args, **kw)
         te = time.time()
         if 'log_time' in kw:
@@ -53,7 +63,7 @@ class DiffFonts:
     font_after: DFont
     settings: dict
     """
-    
+
     SETTINGS = dict(
         glyphs_thresh=0,
         marks_thresh=0,
@@ -315,7 +325,7 @@ def diff_glyphs(font_before, font_after,
     new = _subtract_items(glyphs_after_h, glyphs_before_h)
     modified = _modified_glyphs(glyphs_before_h, glyphs_after_h, thresh,
                                 scale_upms=scale_upms, render_diffs=render_diffs)
-    
+
     new = DiffTable("glyphs new", font_before, font_after, data=new, renderable=True)
     new.report_columns(["glyph", "area", "string"])
     new.sort(key=lambda k: k["glyph"].name)
@@ -343,6 +353,7 @@ def _modified_glyphs(glyphs_before, glyphs_after, thresh=0.00,
 
     table = []
     for k in shared:
+        upm_b = False # was not defined
         if scale_upms and upm_before and upm_b:
             glyphs_before[k]['area'] = (glyphs_before[k]['area'] / upm_before) * upm_after
             glyphs_after[k]['area'] = (glyphs_after[k]['area'] / upm_after) * upm_before
@@ -471,14 +482,14 @@ def diff_kerning(font_before, font_after, thresh=2, scale_upms=True):
     new = DiffTable("kerns new", font_before, font_after, data=new, renderable=True)
     new.report_columns(["left", "right", "value", "string"])
     new.sort(key=lambda k: abs(k["value"]), reverse=True)
-    
+
     modified = DiffTable("kerns modified", font_before, font_after, data=modified, renderable=True)
     modified.report_columns(["left", "right", "diff", "string"])
     modified.sort(key=lambda k: abs(k["diff"]), reverse=True)
     return {
         'new': new,
         'missing': missing,
-        'modified': modified, 
+        'modified': modified,
     }
 
 
@@ -542,7 +553,7 @@ def diff_metrics(font_before, font_after, thresh=1, scale_upms=True):
     modified.report_columns(["glyph", "diff_adv"])
     modified.sort(key=lambda k: k["diff_adv"], reverse=True)
     return {
-            'modified': modified 
+            'modified': modified
             }
 
 
