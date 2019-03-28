@@ -41,32 +41,46 @@ logger = logging.getLogger('fontdiffenator')
 class DFont(TTFont):
     """Container font for ttfont, freetype and hb fonts"""
     def __init__(self, path=None, lazy=False, size=1500):
+        # inherits from TTFont bot doesn't do super(...).__init()__!!!???
+        logger.info('DFont.__init__ …')
         self.path = path
+        logger.info('DFont.__init__::ttfont')
         self.ttfont = TTFont(self.path)
+        logger.info('DFont.__init__::_src_ttfont')
         self._src_ttfont = TTFont(self.path)
+        logger.info('DFont.__init__::recalc_glyphset')
         self.glyphset = None
         self.recalc_glyphset()
         self.axis_order = None
+        logger.info('DFont.__init__::_get_dflt_instance_coordinates')
         self.instance_coordinates = self._get_dflt_instance_coordinates()
+        logger.info('DFont.__init__::_get_instances_coordinates')
         self.instances_coordinates = self._get_instances_coordinates()
         self.glyphs = self.marks = self.mkmks = self.kerns = \
             self.glyph_metrics = self.names = self.attribs = None
 
+        logger.info('DFont.__init__::freetype.Face(self.path)')
         self.ftfont = freetype.Face(self.path)
         self.ftslot = self.ftfont.glyph
 
         self.size = size
+        logger.info('DFont.__init__::set_char_size')
         self.ftfont.set_char_size(self.size)
 
         with open(self.path, 'rb') as fontfile:
+            logger.info('DFont.__init__::fontfile.read()')
             self._fontdata = fontfile.read()
+        logger.info('DFont.__init__::hb.Face.create(self._fontdata)')
         self.hbface = hb.Face.create(self._fontdata)
+        logger.info('DFont.__init__::hb.Font.create(self.hbface)')
         self.hbfont = hb.Font.create(self.hbface)
 
         self.hbfont.scale = (self.size, self.size)
 
         if not lazy:
+            logger.info('DFont.__init__::self.recalc_tables()')
             self.recalc_tables()
+        logger.info('DFont.__init__::DONE!')
 
     def _get_instances_coordinates(self):
         if self.is_variable:

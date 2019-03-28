@@ -75,18 +75,25 @@ class DiffFonts:
                 self._settings[key] = settings[key]
 
         if {"names", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.names')
             self.names()
         if {"attribs", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.attribs')
             self.attribs()
         if {"glyphs", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.glyphs')
             self.glyphs(self._settings["glyphs_thresh"])
         if {"kerns", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.kerns')
             self.kerns(self._settings["kerns_thresh"])
         if {"metrics", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.metrics')
             self.metrics(self._settings["metrics_thresh"])
         if {"marks", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.marks')
             self.marks(self._settings["marks_thresh"])
         if {"mkmks", "*"} >= self._settings["to_diff"]:
+            logger.info('DiffFonts __init__::self.mkmks')
             self.mkmks(self._settings["mkmks_thresh"])
 
     def to_dict(self):
