@@ -146,16 +146,29 @@ class DFont(TTFont):
 
     def recalc_tables(self):
         """Recalculate DFont tables"""
+        logger.info('DFont.recalc_tables …')
+        logger.info('DFont.recalc_tables::recalc_glyphset')
         self.recalc_glyphset()
+        logger.info('DFont.recalc_tables::DumpAnchors')
         anchors = DumpAnchors(self)
+        logger.info('DFont.recalc_tables::dump_glyphs')
         self.glyphs = dump_glyphs(self)
+        logger.info('DFont.recalc_tables::anchors.marks_table')
         self.marks = anchors.marks_table
+        logger.info('DFont.recalc_tables::anchors.mkmks_table')
         self.mkmks = anchors.mkmks_table
+        logger.info('DFont.recalc_tables::dump_glyph_metrics')
         self.glyph_metrics = dump_glyph_metrics(self)
+        logger.info('DFont.recalc_tables::dump_attribs')
         self.attribs = dump_attribs(self)
+        logger.info('DFont.recalc_tables::dump_nametable')
         self.names = dump_nametable(self)
+        logger.info('DFont.recalc_tables::dump_kerning')
         self.kerns = dump_kerning(self)
+        logger.info('DFont.recalc_tables::dump_glyph_metrics')
         self.metrics = dump_glyph_metrics(self)
+        logger.info('DFont.recalc_tables::dump_glyph_metrics')
+        logger.info('DFont.recalc_tables::DONE!')
 
 
 class InputGenerator(HbInputGenerator):
