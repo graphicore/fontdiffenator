@@ -63,6 +63,7 @@ class DiffFonts:
         render_diffs=False,
     )
     def __init__(self, font_before, font_after, settings=None):
+        logger.info('DiffFonts __init__')
         self.font_before = font_before
         self.font_after = font_after
         self._data = collections.defaultdict(dict)
