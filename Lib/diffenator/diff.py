@@ -27,17 +27,6 @@ __all__ = ['DiffFonts', 'diff_metrics', 'diff_kerning',
 
 logger = logging.getLogger('fontdiffenator')
 
-# create formatter
-formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
-                              "%Y-%m-%d %H:%M:%S")
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-# add formatter to ch
-ch.setFormatter(formatter)
-# add ch to logger
-logger.addHandler(ch)
-
-
 def timer(method):
     def timed(*args, **kw):
         ts = time.time()
